@@ -154,4 +154,3 @@ do {
       console.log("Opción inválida");
   }
 } while (opcion !== 5);
-
