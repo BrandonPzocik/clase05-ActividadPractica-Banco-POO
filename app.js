@@ -1,4 +1,5 @@
-const prompt = require("prompt-sync")({ sigint: true });
+import promptSync from "prompt-sync";
+const prompt = promptSync({ sigint: true });
 
 class Titular {
   constructor(nombre, dni) {
@@ -23,12 +24,21 @@ class Cuenta {
   }
 
   depositar(monto) {
-    this.#saldo += monto;
+    if (monto > 0) {
+      this.#saldo += monto;
+      console.log(`Depósito exitoso. Saldo actual: ${this.saldo}`);
+    } else {
+      console.log("Monto inválido para depositar.");
+    }
+  }
+
+  _retirar(monto) {
+    this.#saldo -= monto;
   }
 
   extraer(monto) {
     if (monto > 0 && monto <= this.#saldo) {
-      this.#saldo -= monto;
+      this._retirar(monto);
       console.log(`Extracción exitosa. Saldo actual: ${this.saldo}`);
     } else {
       console.log("Fondos insuficientes en la cuenta.");
@@ -40,7 +50,6 @@ class CajaDeAhorro extends Cuenta {
   extraer(monto) {
     if (monto > 0 && monto <= this.saldo) {
       super.extraer(monto);
-      console.log(`Extracción exitosa. Saldo actual: ${this.saldo}`);
     } else {
       console.log("Fondos insuficientes en la Caja de Ahorro.");
     }
@@ -54,8 +63,10 @@ class CuentaCorriente extends Cuenta {
   }
 
   extraer(monto) {
-    if (monto > 0 && monto <= this.saldo + this.limiteDescubierto) {
-      super.extraer(monto);
+    if (monto <= 0) {
+      console.log("Monto inválido.");
+    } else if (monto <= this.saldo + this.limiteDescubierto) {
+      this._retirar(monto);
       console.log(`Extracción exitosa. Saldo actual: ${this.saldo}`);
     } else {
       console.log("Fondos insuficientes en la Cuenta Corriente.");
@@ -70,11 +81,10 @@ class Banco {
   }
 
   abrirCuenta() {
-    console.log(`--- Abrir cuenta en ${this.nombre}`);
+    console.log(`--- Abrir cuenta en ${this.nombre} ---`);
 
-    const nombreTitular = prompt("ingrese nombre del titular: ");
-    const dni = prompt("ingrese el DNI del titular: ");
-
+    const nombreTitular = prompt("Ingrese nombre del titular: ");
+    const dni = prompt("Ingrese el DNI del titular: ");
     const titular = new Titular(nombreTitular, dni);
 
     const tipoCuenta = parseInt(
@@ -82,21 +92,22 @@ class Banco {
     );
 
     if (tipoCuenta !== 1 && tipoCuenta !== 2) {
-      console.log(
-        "Tipo de cuenta invalido, debe elegir entre una de las opciones: 1 o 2."
-      );
+      console.log("Tipo de cuenta inválido. Debe elegir 1 o 2.");
       return;
     }
+
     const saldo = parseFloat(prompt("Ingrese saldo inicial: "));
     let cuenta;
+
     if (tipoCuenta === 1) {
       cuenta = new CajaDeAhorro(titular, saldo);
-    } else if (tipoCuenta === 2) {
+    } else {
       const limiteDescubierto = parseFloat(
-        prompt("Ingrese el limite descubierto: ")
+        prompt("Ingrese el límite descubierto: ")
       );
       cuenta = new CuentaCorriente(titular, saldo, limiteDescubierto);
     }
+
     this.cuentas.push(cuenta);
     console.log(
       `Cuenta abierta exitosamente para ${titular.Datos} con saldo inicial de $${saldo}.`
@@ -111,10 +122,31 @@ class Banco {
       );
     });
   }
+
+  depositarEnCuenta() {
+    const numDeposito = parseInt(prompt("Número de cuenta: ")) - 1;
+    if (numDeposito < 0 || numDeposito >= this.cuentas.length) {
+      console.log("Número de cuenta inválido.");
+      return;
+    }
+    const montoDep = parseFloat(prompt("Monto a depositar: "));
+    this.cuentas[numDeposito].depositar(montoDep);
+  }
+
+  extraerDeCuenta() {
+    const numExtraer = parseInt(prompt("Número de cuenta: ")) - 1;
+    if (numExtraer < 0 || numExtraer >= this.cuentas.length) {
+      console.log("Número de cuenta inválido.");
+      return;
+    }
+    const montoExt = parseFloat(prompt("Monto a extraer: "));
+    this.cuentas[numExtraer].extraer(montoExt);
+  }
 }
 
-const banco = new Banco("Banco Formosa ");
+const banco = new Banco("Banco Formosa");
 let opcion;
+
 do {
   console.log("\n--- MENU BANCO ---");
   console.log("1. Abrir cuenta");
@@ -133,24 +165,15 @@ do {
       banco.mostrarCuentas();
       break;
     case 3:
-      const numDeposito = parseInt(prompt("Número de cuenta: ")) - 1;
-      const montoDep = parseFloat(prompt("Monto a depositar: "));
-      banco.cuentas[numDeposito].depositar(montoDep);
-      console.log("Depósito realizado");
+      banco.depositarEnCuenta();
       break;
     case 4:
-      const numExtraer = parseInt(prompt("Número de cuenta: ")) - 1;
-      if (numExtraer < 0 || numExtraer >= banco.cuentas.length) {
-        console.log("Número de cuenta inválido.");
-        break;
-      }
-      const montoExt = parseFloat(prompt("Monto a extraer: "));
-      banco.cuentas[numExtraer].extraer(montoExt);
+      banco.extraerDeCuenta();
       break;
     case 5:
       console.log("Saliendo...");
       break;
     default:
-      console.log("Opción inválida");
+      console.log("Opción inválida.");
   }
 } while (opcion !== 5);
