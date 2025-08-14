@@ -27,7 +27,7 @@ La interacción se realiza por **consola** usando [`prompt-sync`].
 
 ---
 
-## 📂 Diagrama de Clases (ASCII)
+## Diagrama de Clases (ASCII)
 
              +------------------+
              |     Titular       |
@@ -74,7 +74,7 @@ La interacción se realiza por **consola** usando [`prompt-sync`].
 
 ---
 
-## 🛠 Decisiones de Diseño
+## Decisiones de Diseño
 
 1. **Encapsulamiento:**  
    El saldo (`#saldo`) en la clase `Cuenta` es privado para evitar modificaciones directas fuera de la clase.
@@ -85,7 +85,7 @@ La interacción se realiza por **consola** usando [`prompt-sync`].
 
 ---
 
-## ▶️ Cómo correr el programa
+## Cómo correr el programa
 
 ### 1️⃣ Requisitos previos
 
