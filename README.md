@@ -55,7 +55,7 @@ La interacción se realiza por **consola** usando [`prompt-sync`].
 ```bash
 git clone https://github.com/BrandonPzocik/clase05-ActividadPractica-Banco-POO.git
 cd Clase05-ActividadPractica
-node ./app.js
+node ./index.js
 ```
 
 ## Ejemplo de uso
