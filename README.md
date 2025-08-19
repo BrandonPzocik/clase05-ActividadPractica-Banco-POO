@@ -27,50 +27,9 @@ La interacción se realiza por **consola** usando [`prompt-sync`].
 
 ---
 
-## Diagrama de Clases (ASCII)
+## Diagrama de Clases
 
-             +------------------+
-             |     Titular       |
-             +-------------------+
-             | - nombre          |
-             | - dni             |
-             +-------------------+
-             | + Datos           |
-             +-------------------+
-
-            +------------------+
-            | Cuenta           |
-            +------------------+
-            | - #saldo         |
-            | + titular        |
-            +------------------+
-            | + saldo()        |
-            | + depositar()    |
-            | + extraer()      |
-            +------------------+
-
-                +----------------------+
-                | CajaDeAhorro         |
-                +----------------------+
-                | extraer()            |
-                +----------------------+
-
-                +----------------------+
-                | CuentaCorriente      |
-                +----------------------+
-                | - limiteDescubierto  |
-                | + extraer()          |
-                +----------------------+
-
-                +----------------------+
-                |        Banco         |
-                +----------------------+
-                | - nombre             |
-                | - cuentas[]          |
-                +----------------------+
-                | + abrirCuenta()      |
-                | + mostrarCuentas()   |
-                +----------------------+
+(![Diagrama](<diagrama .png>))
 
 ---
 

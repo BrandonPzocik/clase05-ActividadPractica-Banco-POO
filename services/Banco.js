@@ -28,12 +28,11 @@ export default class Banco {
       }
     } while (tipoCuenta !== 1 && tipoCuenta !== 2);
 
-    // validar saldo inicial
     let saldo;
     do {
       saldo = parseFloat(prompt("Ingrese saldo inicial: "));
       if (isNaN(saldo) || saldo < 0) {
-        console.log("❌ Ingrese un número válido para el saldo.");
+        console.log("Ingrese un número válido para el saldo.");
       }
     } while (isNaN(saldo) || saldo < 0);
 
@@ -41,16 +40,13 @@ export default class Banco {
     if (tipoCuenta === 1) {
       cuenta = new CajaDeAhorro(titular, saldo);
     } else {
-      // validar límite descubierto
       let limiteDescubierto;
       do {
         limiteDescubierto = parseFloat(
           prompt("Ingrese el límite descubierto: ")
         );
         if (isNaN(limiteDescubierto) || limiteDescubierto < 0) {
-          console.log(
-            "❌ Ingrese un número válido para el límite descubierto."
-          );
+          console.log("Ingrese un número válido para el límite descubierto.");
         }
       } while (isNaN(limiteDescubierto) || limiteDescubierto < 0);
 
@@ -59,7 +55,7 @@ export default class Banco {
 
     this.cuentas.push(cuenta);
     console.log(
-      `✅ Cuenta abierta exitosamente para ${titular.Datos} con saldo inicial de $${saldo}.`
+      `Cuenta abierta exitosamente para ${titular.Datos} con saldo inicial de $${saldo}.`
     );
   }
 
@@ -104,8 +100,6 @@ export default class Banco {
       parseInt(
         prompt("Elija la cuenta que va recibir la transferencia (número): ")
       ) - 1;
-
-    // validaciones
     if (
       numOrigen < 0 ||
       numOrigen >= this.cuentas.length ||
